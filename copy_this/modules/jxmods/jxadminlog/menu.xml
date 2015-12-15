@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
 <OX>
     <OXMENU id="NAVIGATION_ESHOPADMIN">
+        <MAINMENU id="mxmainmenu">
+            <SUBMENU id="mxcountries" cl="country" list="country_list">
+                <TAB id="tbclcountry_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxvendor" cl="vendor" list="vendor_list">
+                <TAB id="tbclvendor_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxmanufacturer" cl="manufacturer" list="manufacturer_list">
+                <TAB id="tbclmanufacturer_history" cl="jxadminlog_history" />
+            </SUBMENU>
+        </MAINMENU>
+        
+        <MAINMENU id="mxshopsett">
+            <SUBMENU id="mxpaymeth" cl="admin_payment" list="payment_list">
+                <TAB id="tbclpayment_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxdiscount" cl="discount" list="discount_list">
+                <TAB id="tbcldiscount_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxshippingset" cl="deliveryset" list="deliveryset_list">
+                <TAB id="tbcldeliveryset_history" cl="jxadmin_loghistory" />
+            </SUBMENU>
+            <SUBMENU id="mxshipping" cl="delivery" list="delivery_list">
+                <TAB id="tbcldelivery_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxvouchers" cl="voucherserie" list="voucherserie_list">
+                <TAB id="tbclvoucherserie_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxwrapping" cl="admin_wrapping" list="wrapping_list">
+                <TAB id="tbclwrapping_history" cl="jxadminlog_history" />
+            </SUBMENU>
+        </MAINMENU>
+
+        <MAINMENU id="mxmanageprod">
+            <SUBMENU id="mxarticles" cl="article" list="article_list">
+                <TAB id="tbclarticle_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxcategories" cl="category" list="category_list">
+                <TAB id="tbclcategory_history" cl="jxadminlog_history" />
+            </SUBMENU>
+        </MAINMENU>
+
+        <MAINMENU id="mxuadmin">
+            <SUBMENU id="mxusers" cl="admin_user" list="user_list">
+                <TAB id="tbcluser_history" cl="jxadminlog_history" />
+            </SUBMENU>
+            <SUBMENU id="mxugroups" cl="usergroup" list="usergroup_list">
+                <TAB id="tbclusergroup_history" cl="jxadminlog_history" />
+            </SUBMENU>
+        </MAINMENU>
+
+        <MAINMENU id="mxorders">
+            <SUBMENU id="mxdisplayorders" cl="admin_order" list="order_list">
+                <TAB id="tbclorder_history" cl="jxadminlog_history" />
+            </SUBMENU>
+        </MAINMENU>
+
         <MAINMENU id="mxservice">
             <SUBMENU id="jxadminlog_menu" cl="jxadminlog">
             </SUBMENU>

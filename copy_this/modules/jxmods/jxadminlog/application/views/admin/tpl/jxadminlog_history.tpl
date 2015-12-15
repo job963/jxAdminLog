@@ -44,10 +44,10 @@ function changeFnc( fncName )
 </form>
 
 
-<div style="height:100%;">
+<div style="height:92%;">
 
-    <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:96%; overflow-y:scroll; float:left;">
-        <form name="jxadminlog" id="jxadminlog" action="[{ $oViewConf->getSelfLink() }]" method="post">
+    <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll; float:left;">
+        <form name="jxadminlog_history" id="jxadminlog_history" action="[{ $oViewConf->getSelfLink() }]" method="post">
             [{ $oViewConf->getHiddenSid() }]
             <input type="hidden" name="oxid" value="[{ $oxid }]">
             <input type="hidden" name="cl" value="jxadminlog">
@@ -76,11 +76,12 @@ function changeFnc( fncName )
     </div>
 
     <div style="float:right;[{*position:relative;bottom:-40px;*}]padding-right:10px;">
+    <br />
             <a href="https://github.com/job963/jxAdminLog" target="_blank"><span style="color:gray;">jxAdminLog</span></a>
     </div>
 
 </div>
 
-[{include file="bottomnaviitem.tpl"}]
+[{*include file="bottomnaviitem.tpl"*}]
 [{include file="bottomitem.tpl"}]
 

@@ -22,27 +22,28 @@
  *
  */
 
-class jxadminlog extends oxAdminDetails {
+class jxadminlog_history extends oxAdminDetails {
 
-    protected $_sThisTemplate = "jxadminlog.tpl";
+    protected $_sThisTemplate = "jxadminlog_history.tpl";
 
     /**
-     * Displays the latest log entries
+     * Displays history of article
      */
     public function render() 
     {
         parent::render();
 
-        $myConfig = oxRegistry::getConfig();
-        $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
-        
-        if ($blAdminLog == TRUE) {
+        $sObjectId = $this->getEditObjectId();
+		
+		
             $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
                     . "FROM oxadminlog l, oxuser u "
                     . "WHERE l.oxuserid = u.oxid "
+                    . "AND l.oxsql LIKE '%{$sObjectId}%' "
                     . "ORDER BY oxtimestamp DESC "
-                    . "LIMIT 0,200";
-
+                    . "LIMIT 0,100";
+		
+            //echo $sSql.'<hr>';
             $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $rs = $oDb->Execute($sSql);
             $aAdminLogs = array();
@@ -50,13 +51,12 @@ class jxadminlog extends oxAdminDetails {
                 array_push($aAdminLogs, $rs->fields);
                 $rs->MoveNext();
             }
-            
+
             foreach ($aAdminLogs as $key => $aAdminLog) {
                 $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
             }
-                
-            $this->_aViewData["aAdminLogs"] = $aAdminLogs;
-        }
+
+        $this->_aViewData["aAdminLogs"] = $aAdminLogs;
 
         return $this->_sThisTemplate;
     }
@@ -80,20 +80,5 @@ class jxadminlog extends oxAdminDetails {
         return $sText;
     }
     
-    
-    /*
-    public function deleteVoucher() 
-    {
-        $sVoucherId = oxRegistry::getConfig()->getRequestParameter( 'voucherdelid' );
-        
-        //echo 'deleteVoucher='.$sVoucherId;
-        $sSql = "DELETE FROM oxvouchers WHERE oxid = '{$sVoucherId}' ";
-        $oDb = oxDb::getDb();
-        $oDb->Execute($sSql);
-        $oDb = null;
-        
-        return;
-    }
-    */
 	
 }
