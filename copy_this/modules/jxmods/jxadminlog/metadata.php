@@ -19,7 +19,7 @@ $aModule = array(
                                 . '<code>$this->blLogChangesInAdmin = false;</code> to <code>True</code>)<br /><br />'
                         ),
     'thumbnail'    => 'jxadminlog.png',
-    'version'      => '0.1.0',
+    'version'      => '0.2.0',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxAdminLog',
     'email'        => 'jobarthel@gmail.com',
@@ -32,5 +32,13 @@ $aModule = array(
     'templates'    => array(
                         'jxadminlog.tpl'            => 'jxmods/jxadminlog/application/views/admin/tpl/jxadminlog.tpl',
                         'jxadminlog_history.tpl'    => 'jxmods/jxadminlog/application/views/admin/tpl/jxadminlog_history.tpl'
+                        ),
+    'settings' => array(
+                        array(
+                                'group' => 'JXADMINLOG_WHERE', 
+                                'name'  => 'sJxAdminLogExcludeThis', 
+                                'type'  => 'str', 
+                                'value' => ''
+                                )
                         )
 );

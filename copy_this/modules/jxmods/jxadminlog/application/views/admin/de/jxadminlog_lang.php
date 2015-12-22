@@ -25,5 +25,6 @@ $aLang = array(
     
 	'jxadminlog_menu'                	=> 'Admin Log',
 	'JXADMINLOG_TIME'                       => 'Datum/Zeit',
+	'JXADMINLOG_REGEXP'                     => 'Eigene RegExp',
 	'JXADMINLOG_SQL'                        => 'SQL'
 );

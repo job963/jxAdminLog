@@ -35,11 +35,24 @@ class jxadminlog extends oxAdminDetails {
 
         $myConfig = oxRegistry::getConfig();
         $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
+        $sExcludeThis = $myConfig->getConfigParam( 'sJxAdminLogExcludeThis' );
+        if ( !Empty($sExcludeThis) ) {
+            $sExcludeThis = "AND l.oxsql NOT REGEXP '{$sExcludeThis}' ";
+        }
         
         if ($blAdminLog == TRUE) {
+            $cReportType = $this->getConfig()->getRequestParameter( 'jxadminlog_reporttype' );
+            if (empty($cReportType))
+                $cReportType = "all";
+
+            if ($cReportType == "regexp")
+                $sFreeRegexp = $this->getConfig()->getRequestParameter( 'jxadminlog_regexp' );
+
             $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
                     . "FROM oxadminlog l, oxuser u "
                     . "WHERE l.oxuserid = u.oxid "
+                    . $sExcludeThis
+                    . $this->_createKeywordFilter($cReportType, $sFreeRegexp)
                     . "ORDER BY oxtimestamp DESC "
                     . "LIMIT 0,200";
 
@@ -54,11 +67,68 @@ class jxadminlog extends oxAdminDetails {
             foreach ($aAdminLogs as $key => $aAdminLog) {
                 $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
             }
+            
+            $oModule = oxNew('oxModule');
+            $oModule->load('jxadminlog');
+            $this->_aViewData["sModuleId"] = $oModule->getId();
+            $this->_aViewData["sModuleVersion"] = $oModule->getInfo('version');
                 
+            $this->_aViewData["ReportType"] = $cReportType;
+            $this->_aViewData["FreeRegexp"] = $sFreeRegexp;
             $this->_aViewData["aAdminLogs"] = $aAdminLogs;
         }
 
         return $this->_sThisTemplate;
+    }
+	
+	
+    private function _createKeywordFilter( $sReport, $sFreeRegexp )
+    {
+        switch ( $sReport ) {
+
+            case 'article':
+                $aKeywords = array('oxarticles','oxartextends');
+                break;
+
+            case 'category':
+                $aKeywords = array('oxarticles','oxartextends');
+                break;
+
+            case 'user':
+                $aKeywords = array('oxuser','oxnewssubscribed','oxremark');
+                break;
+
+            case 'order':
+                $aKeywords = array('oxorder','oxorderarticles');
+                break;
+
+            case 'payment':
+                $aKeywords = array('oxpayments');
+                break;
+
+            case 'module':
+                $aKeywords = array('oxconfig','oxconfigdisplay','oxtplblocks');
+                break;
+
+            case 'regexp':
+                if (empty($sFreeRegexp)) {
+                    $sFreeRegexp = '.';
+                }
+                $aKeywords = array( $sFreeRegexp );
+                break;
+
+            default:    // all
+                return '';
+                break;
+        }
+        
+        if (count($aKeywords) > 1) {
+            $sRegex = implode( '|', $aKeywords );
+        } else {
+            $sRegex = $aKeywords[0];
+        }
+        
+        return "AND  l.oxsql REGEXP '" . $sRegex . "' ";
     }
     
     
