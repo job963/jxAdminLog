@@ -45,6 +45,11 @@ function changeFnc( fncName )
 
 
 <div style="height:100%; overflow-y:no-scroll;">
+    [{if $blAdminLog == FALSE }]
+        <div style="border:2px solid #dd0000;margin:10px;padding:5px;background-color:#ffdddd;font-family:sans-serif;font-size:14px;">
+            <b>Setting <i>blLogChangesInAdmin</i> in <i>config.inc.php</i> is deactivated!</b><br />Actually no new admin action will be logged.
+        </div>
+    [{/if}]
     <div>
         <form name="jxadminlog" id="jxadminlog" action="[{ $oViewConf->getSelfLink() }]" method="post">
             [{ $oViewConf->getHiddenSid() }]
@@ -53,7 +58,7 @@ function changeFnc( fncName )
             <input type="hidden" name="fnc" value="">
             [{*<input type="hidden" name="voucherdelid" value="">*}]
             
-            Filtern nach: 
+            [{ oxmultilang ident="JXADMINLOG_FILTERBY" }]: 
             <select name="jxadminlog_reporttype" onchange="document.forms['jxadminlog'].elements['fnc'].value='';this.form.submit()">
                 <option value="all" [{if $ReportType == "all"}]selected[{/if}]>[{ oxmultilang ident="CONTENT_LIST_ALL" }]&nbsp;</option>
                 <option value="article" [{if $ReportType == "article"}]selected[{/if}]>[{ oxmultilang ident="GENERAL_ITEM" }]&nbsp;</option>
@@ -64,7 +69,7 @@ function changeFnc( fncName )
                 <option value="module" [{if $ReportType == "module"}]selected[{/if}]>[{ oxmultilang ident="mxmodule" }]&nbsp;</option>
                 <option value="regexp" [{if $ReportType == "regexp"}]selected[{/if}]>[{ oxmultilang ident="JXADMINLOG_REGEXP" }]&nbsp;</option>
             </select>
-            <span style="margin-left:20px;[{if $ReportType != "regexp"}]color:#a0a0a0;[{/if}]">Filterbedingung:</span> 
+            <span style="margin-left:20px;[{if $ReportType != "regexp"}]color:#a0a0a0;[{/if}]">[{ oxmultilang ident="JXADMINLOG_FILTERCONDITION" }]:</span> 
             <input type="text" name="jxadminlog_regexp" value="[{$FreeRegexp}]" [{if $ReportType != "regexp"}]disabled="disabled"[{else}]size=40[{/if}]>
             <input style="margin-left:20px;" type="submit" 
                onClick="document.forms['jxadminlog'].elements['fnc'].value = '';" 

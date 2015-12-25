@@ -33,6 +33,9 @@ class jxadminlog_history extends oxAdminDetails {
     {
         parent::render();
 
+        $myConfig = oxRegistry::getConfig();
+        $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
+
         $sObjectId = $this->getEditObjectId();
 		
 		
@@ -55,6 +58,8 @@ class jxadminlog_history extends oxAdminDetails {
             foreach ($aAdminLogs as $key => $aAdminLog) {
                 $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
             }
+            
+        $this->_aViewData["blAdminLog"] = $blAdminLog;
 
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
 

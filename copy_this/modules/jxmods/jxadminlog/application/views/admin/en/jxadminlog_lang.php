@@ -23,7 +23,14 @@ $aLang = array(
     
 	'tbclorder_history'                	=> 'History',
 
-    	'tbclvoucherserie_show'                	=> 'Admin Log',
+	'jxadminlog_menu'                	=> 'Admin Log',
+    
+        'SHOP_MODULE_GROUP_JXADMINLOG_WHERE'    => 'Display Filter',
+        'SHOP_MODULE_sJxAdminLogExcludeThis'    => 'Exclude Condition (regular expression, fitting item will be excluded)',
+    
+	'JXADMINLOG_FILTERBY'                   => 'Filter by',
+	'JXADMINLOG_FILTERCONDITION'            => 'Filter Condition',
 	'JXADMINLOG_TIME'                       => 'Date/Time',
+	'JXADMINLOG_REGEXP'                     => 'Your RegExp',
 	'JXADMINLOG_SQL'                        => 'SQL'
 );

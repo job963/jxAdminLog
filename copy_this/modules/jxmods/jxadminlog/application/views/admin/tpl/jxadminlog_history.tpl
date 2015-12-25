@@ -47,6 +47,11 @@ function changeFnc( fncName )
 <div style="height:92%;">
 
     <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll; float:left;">
+        [{if $blAdminLog == FALSE }]
+            <div style="border:2px solid #dd0000;margin:10px;padding:5px;background-color:#ffdddd;font-family:sans-serif;font-size:14px;">
+                <b>Setting <i>blLogChangesInAdmin</i> in <i>config.inc.php</i> is deactivated!</b><br />Actually no new admin action will be logged.
+            </div>
+        [{/if}]
         <form name="jxadminlog_history" id="jxadminlog_history" action="[{ $oViewConf->getSelfLink() }]" method="post">
             [{ $oViewConf->getHiddenSid() }]
             <input type="hidden" name="oxid" value="[{ $oxid }]">

@@ -27,11 +27,16 @@ $aModule = array(
                         ),
     'files'        => array(
                         'jxadminlog'     	=> 'jxmods/jxadminlog/application/controllers/admin/jxadminlog.php',
-                        'jxadminlog_history' 	=> 'jxmods/jxadminlog/application/controllers/admin/jxadminlog_history.php'
+                        'jxadminlog_history' 	=> 'jxmods/jxadminlog/application/controllers/admin/jxadminlog_history.php',
+                        'jxadminlog_events' 	=> 'jxmods/jxadminlog/core/jxadminlog_events.php'
                         ),
     'templates'    => array(
                         'jxadminlog.tpl'            => 'jxmods/jxadminlog/application/views/admin/tpl/jxadminlog.tpl',
                         'jxadminlog_history.tpl'    => 'jxmods/jxadminlog/application/views/admin/tpl/jxadminlog_history.tpl'
+                        ),
+    'events'       => array(
+                        'onActivate'   => 'jxadminlog_events::onActivate', 
+                        'onDeactivate' => 'jxadminlog_events::onDeactivate'
                         ),
     'settings' => array(
                         array(

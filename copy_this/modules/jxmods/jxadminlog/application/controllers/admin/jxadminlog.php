@@ -40,7 +40,7 @@ class jxadminlog extends oxAdminDetails {
             $sExcludeThis = "AND l.oxsql NOT REGEXP '{$sExcludeThis}' ";
         }
         
-        if ($blAdminLog == TRUE) {
+        /*if ($blAdminLog == TRUE) {*/
             $cReportType = $this->getConfig()->getRequestParameter( 'jxadminlog_reporttype' );
             if (empty($cReportType))
                 $cReportType = "all";
@@ -67,16 +67,18 @@ class jxadminlog extends oxAdminDetails {
             foreach ($aAdminLogs as $key => $aAdminLog) {
                 $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
             }
-            
-            $oModule = oxNew('oxModule');
-            $oModule->load('jxadminlog');
-            $this->_aViewData["sModuleId"] = $oModule->getId();
-            $this->_aViewData["sModuleVersion"] = $oModule->getInfo('version');
                 
             $this->_aViewData["ReportType"] = $cReportType;
             $this->_aViewData["FreeRegexp"] = $sFreeRegexp;
             $this->_aViewData["aAdminLogs"] = $aAdminLogs;
-        }
+        /*}*/
+            
+        $this->_aViewData["blAdminLog"] = $blAdminLog;
+
+        $oModule = oxNew('oxModule');
+        $oModule->load('jxadminlog');
+        $this->_aViewData["sModuleId"] = $oModule->getId();
+        $this->_aViewData["sModuleVersion"] = $oModule->getInfo('version');
 
         return $this->_sThisTemplate;
     }
