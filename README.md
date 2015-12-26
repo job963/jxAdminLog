@@ -4,11 +4,11 @@ OXID eShop Admin Extension for Displaying Admin Log Table
 
 ## Preparation ##
 
-Open config.inc.php and search for 
+Change rights of config.inc.php to writable, open the file and search for 
 ```
 $this->blLogChangesInAdmin = false;
 ```
-and set to True. This enables the logging of admin actions.
+set to True and save the file. This enables the logging of admin actions. Do not forget to remove "write" right after saving the changes.
 
 ## Setup ##
 
