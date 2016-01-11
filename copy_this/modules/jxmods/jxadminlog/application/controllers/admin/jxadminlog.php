@@ -17,7 +17,7 @@
  *
  * @link      https://github.com/job963/jxAdminLog
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) 2015 Joachim Barthel
+ * @copyright (C) 2015-2016 Joachim Barthel
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -27,51 +27,58 @@ class jxadminlog extends oxAdminDetails {
     protected $_sThisTemplate = "jxadminlog.tpl";
 
     /**
-     * Displays the latest log entries
+     * Displays the latest admin log entries
      */
     public function render() 
     {
         parent::render();
 
         $myConfig = oxRegistry::getConfig();
+        
+        if ($myConfig->getBaseShopId() == 'oxbaseshop') {
+            // CE or PE shop
+            $sShopId = "'{$myConfig->getBaseShopId()}'";
+        } else {
+            // EE shop
+            $sShopId = "{$myConfig->getBaseShopId()}";
+        }
         $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
         $sExcludeThis = $myConfig->getConfigParam( 'sJxAdminLogExcludeThis' );
         if ( !Empty($sExcludeThis) ) {
             $sExcludeThis = "AND l.oxsql NOT REGEXP '{$sExcludeThis}' ";
         }
         
-        /*if ($blAdminLog == TRUE) {*/
-            $cReportType = $this->getConfig()->getRequestParameter( 'jxadminlog_reporttype' );
-            if (empty($cReportType))
-                $cReportType = "all";
+        $cReportType = $this->getConfig()->getRequestParameter( 'jxadminlog_reporttype' );
+        if (empty($cReportType))
+            $cReportType = "all";
 
-            if ($cReportType == "regexp")
-                $sFreeRegexp = $this->getConfig()->getRequestParameter( 'jxadminlog_regexp' );
+        if ($cReportType == "regexp")
+            $sFreeRegexp = $this->getConfig()->getRequestParameter( 'jxadminlog_regexp' );
 
-            $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
-                    . "FROM oxadminlog l, oxuser u "
-                    . "WHERE l.oxuserid = u.oxid "
+        $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
+                . "FROM oxadminlog l, oxuser u "
+                . "WHERE l.oxuserid = u.oxid "
                     . $sExcludeThis
                     . $this->_createKeywordFilter($cReportType, $sFreeRegexp)
-                    . "ORDER BY oxtimestamp DESC "
-                    . "LIMIT 0,200";
+                    . "AND oxshopid = {$sShopId} "
+                . "ORDER BY oxtimestamp DESC "
+                . "LIMIT 0,200";
 
-            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-            $rs = $oDb->Execute($sSql);
-            $aAdminLogs = array();
-            while (!$rs->EOF) {
-                array_push($aAdminLogs, $rs->fields);
-                $rs->MoveNext();
-            }
-            
-            foreach ($aAdminLogs as $key => $aAdminLog) {
-                $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
-            }
-                
-            $this->_aViewData["ReportType"] = $cReportType;
-            $this->_aViewData["FreeRegexp"] = $sFreeRegexp;
-            $this->_aViewData["aAdminLogs"] = $aAdminLogs;
-        /*}*/
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $rs = $oDb->Execute($sSql);
+        $aAdminLogs = array();
+        while (!$rs->EOF) {
+            array_push($aAdminLogs, $rs->fields);
+            $rs->MoveNext();
+        }
+
+        foreach ($aAdminLogs as $key => $aAdminLog) {
+            $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
+        }
+
+        $this->_aViewData["ReportType"] = $cReportType;
+        $this->_aViewData["FreeRegexp"] = $sFreeRegexp;
+        $this->_aViewData["aAdminLogs"] = $aAdminLogs;
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
 
@@ -137,14 +144,14 @@ class jxadminlog extends oxAdminDetails {
     private function _keywordHighlighter( $sText ) 
     {
         $aSearch = array(
-            'insert',
-            'update',
-            'delete'
+            'insert ',
+            'update ',
+            'delete '
         );
         $aReplace = array(
-            '<span style="color:green;">insert</span>',
-            '<span style="color:blue;">update</span>',
-            '<span style="color:red;">delete</span>'
+            '<span style="color:green;">insert </span>',
+            '<span style="color:blue;">update </span>',
+            '<span style="color:red;">delete </span>'
         );
         
         $sText = str_replace($aSearch, $aReplace, $sText);
@@ -152,20 +159,5 @@ class jxadminlog extends oxAdminDetails {
         return $sText;
     }
     
-    
-    /*
-    public function deleteVoucher() 
-    {
-        $sVoucherId = oxRegistry::getConfig()->getRequestParameter( 'voucherdelid' );
-        
-        //echo 'deleteVoucher='.$sVoucherId;
-        $sSql = "DELETE FROM oxvouchers WHERE oxid = '{$sVoucherId}' ";
-        $oDb = oxDb::getDb();
-        $oDb->Execute($sSql);
-        $oDb = null;
-        
-        return;
-    }
-    */
 	
 }

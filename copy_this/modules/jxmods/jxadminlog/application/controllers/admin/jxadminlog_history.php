@@ -17,7 +17,7 @@
  *
  * @link      https://github.com/job963/jxAdminLog
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) 2015 Joachim Barthel
+ * @copyright (C) 2015-2016 Joachim Barthel
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -27,40 +27,47 @@ class jxadminlog_history extends oxAdminDetails {
     protected $_sThisTemplate = "jxadminlog_history.tpl";
 
     /**
-     * Displays history of article
+     * Displays the latest log entries of an object
      */
     public function render() 
     {
         parent::render();
 
         $myConfig = oxRegistry::getConfig();
+        
+        if ($myConfig->getBaseShopId() == 'oxbaseshop') {
+            // CE or PE shop
+            $sShopId = "'{$myConfig->getBaseShopId()}'";
+        } else {
+            // EE shop
+            $sShopId = "{$myConfig->getBaseShopId()}";
+        }
         $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
 
         $sObjectId = $this->getEditObjectId();
 		
 		
-            $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
-                    . "FROM oxadminlog l, oxuser u "
-                    . "WHERE l.oxuserid = u.oxid "
+        $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
+                . "FROM oxadminlog l, oxuser u "
+                . "WHERE l.oxuserid = u.oxid "
                     . "AND l.oxsql LIKE '%{$sObjectId}%' "
-                    . "ORDER BY oxtimestamp DESC "
-                    . "LIMIT 0,100";
-		
-            //echo $sSql.'<hr>';
-            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-            $rs = $oDb->Execute($sSql);
-            $aAdminLogs = array();
-            while (!$rs->EOF) {
-                array_push($aAdminLogs, $rs->fields);
-                $rs->MoveNext();
-            }
+                    . "AND oxshopid = {$sShopId} "
+                . "ORDER BY oxtimestamp DESC "
+                . "LIMIT 0,100";
 
-            foreach ($aAdminLogs as $key => $aAdminLog) {
-                $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
-            }
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        $rs = $oDb->Execute($sSql);
+        $aAdminLogs = array();
+        while (!$rs->EOF) {
+            array_push($aAdminLogs, $rs->fields);
+            $rs->MoveNext();
+        }
+
+        foreach ($aAdminLogs as $key => $aAdminLog) {
+            $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
+        }
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
-
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
 
         return $this->_sThisTemplate;
