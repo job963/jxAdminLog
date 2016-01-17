@@ -1,23 +1,12 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
-[{ if $readonly}]
+[{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
     [{assign var="readonly" value=""}]
 [{/if}]
 
-[{*
-<script type="text/javascript">
-<!--
-function changeFnc( fncName )
-{
-    var langvar = document.myedit.elements['fnc'];
-    if (langvar != null )
-        langvar.value = fncName;
-}
-//-->
-</script>
-*}]
+
 <style>
     #liste tr:hover td{
         background-color: #e0e0e0;

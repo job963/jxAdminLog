@@ -1,23 +1,12 @@
 [{include file="headitem.tpl" title="GENERAL_ADMIN_TITLE"|oxmultilangassign}]
 
-[{ if $readonly}]
+[{if $readonly}]
     [{assign var="readonly" value="readonly disabled"}]
 [{else}]
     [{assign var="readonly" value=""}]
 [{/if}]
 
-[{*
-<script type="text/javascript">
-<!--
-function changeFnc( fncName )
-{
-    var langvar = document.myedit.elements['fnc'];
-    if (langvar != null )
-        langvar.value = fncName;
-}
-//-->
-</script>
-*}]
+
 <style>
     #liste tr:hover td{
         background-color: #e0e0e0;
@@ -69,8 +58,18 @@ function changeFnc( fncName )
                 <option value="module" [{if $ReportType == "module"}]selected[{/if}]>[{ oxmultilang ident="mxmodule" }]&nbsp;</option>
                 <option value="regexp" [{if $ReportType == "regexp"}]selected[{/if}]>[{ oxmultilang ident="JXADMINLOG_REGEXP" }]&nbsp;</option>
             </select>
+            
             <span style="margin-left:20px;[{if $ReportType != "regexp"}]color:#a0a0a0;[{/if}]">[{ oxmultilang ident="JXADMINLOG_FILTERCONDITION" }]:</span> 
             <input type="text" name="jxadminlog_regexp" value="[{$FreeRegexp}]" [{if $ReportType != "regexp"}]disabled="disabled"[{else}]size=40[{/if}]>
+            
+            <span style="margin-left:20px;">[{ oxmultilang ident="GENERAL_USER" }]:</span>
+            <select name="jxadminlog_adminuser" onchange="document.forms['jxadminlog'].elements['fnc'].value='';this.form.submit()">
+                <option value="all" [{if $AdminUser == "all"}]selected[{/if}]>[{ oxmultilang ident="CONTENT_LIST_ALL" }]&nbsp;</option>
+                [{foreach item="aAdminUser" from=$aAdminUsers}]
+                    <option value="[{$aAdminUser.oxuserid}]" [{if $AdminUser == $aAdminUser.oxuserid}]selected[{/if}]>[{$aAdminUser.oxfname}] [{$aAdminUser.oxlname}]&nbsp;</option>
+                [{/foreach}]
+            </select>
+            
             <input style="margin-left:20px;" type="submit" 
                onClick="document.forms['jxadminlog'].elements['fnc'].value = '';" 
                value=" [{ oxmultilang ident="ORDER_MAIN_UPDATE_DELPAY" }] " />

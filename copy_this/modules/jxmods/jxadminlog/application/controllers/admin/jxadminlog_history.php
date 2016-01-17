@@ -27,7 +27,7 @@ class jxadminlog_history extends oxAdminDetails {
     protected $_sThisTemplate = "jxadminlog_history.tpl";
 
     /**
-     * Displays the latest log entries of an object
+     * Displays the latest log entries of selected object
      */
     public function render() 
     {
@@ -51,16 +51,25 @@ class jxadminlog_history extends oxAdminDetails {
                 . "FROM oxadminlog l, oxuser u "
                 . "WHERE l.oxuserid = u.oxid "
                     . "AND l.oxsql LIKE '%{$sObjectId}%' "
-                    . "AND oxshopid = {$sShopId} "
+                    . "AND l.oxshopid = {$sShopId} "
                 . "ORDER BY oxtimestamp DESC "
                 . "LIMIT 0,100";
 
         $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        $rs = $oDb->Execute($sSql);
+        //$rs = $oDb->Execute($sSql);
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
         $aAdminLogs = array();
-        while (!$rs->EOF) {
-            array_push($aAdminLogs, $rs->fields);
-            $rs->MoveNext();
+        if ($rs) {
+            while (!$rs->EOF) {
+                array_push($aAdminLogs, $rs->fields);
+                $rs->MoveNext();
+            }
         }
 
         foreach ($aAdminLogs as $key => $aAdminLog) {

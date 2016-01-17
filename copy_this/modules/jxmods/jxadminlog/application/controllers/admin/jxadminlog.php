@@ -27,7 +27,7 @@ class jxadminlog extends oxAdminDetails {
     protected $_sThisTemplate = "jxadminlog.tpl";
 
     /**
-     * Displays the latest admin log entries
+     * Displays the latest admin log entries as full report
      */
     public function render() 
     {
@@ -37,10 +37,10 @@ class jxadminlog extends oxAdminDetails {
         
         if ($myConfig->getBaseShopId() == 'oxbaseshop') {
             // CE or PE shop
-            $sShopId = "'{$myConfig->getBaseShopId()}'";
+            $sWhereShopId = "";
         } else {
             // EE shop
-            $sShopId = "{$myConfig->getBaseShopId()}";
+            $sWhereShopId = "AND l.oxshopid = {$myConfig->getBaseShopId()} ";
         }
         $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
         $sExcludeThis = $myConfig->getConfigParam( 'sJxAdminLogExcludeThis' );
@@ -55,21 +55,60 @@ class jxadminlog extends oxAdminDetails {
         if ($cReportType == "regexp")
             $sFreeRegexp = $this->getConfig()->getRequestParameter( 'jxadminlog_regexp' );
 
+        $cAdminUser = $this->getConfig()->getRequestParameter( 'jxadminlog_adminuser' );
+        if (empty($cAdminUser)) {
+            $cAdminUser = "all";
+            $sWhereUser = "";
+        } else {
+            $sWhereUser = "AND l.oxuserid = '{$cAdminUser}' ";
+        }
+
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+
+        $sSql = "SELECT DISTINCT l.oxuserid, u.oxusername, u.oxfname, u.oxlname "
+                . "FROM oxadminlog l, oxuser u "
+                . "WHERE l.oxuserid = u.oxid "
+                    . $sExcludeThis
+                . "ORDER BY u.oxfname, u.oxlname ";
+        
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        
+        $aAdminUsers = array();
+        if ($rs) {
+            while (!$rs->EOF) {
+                array_push($aAdminUsers, $rs->fields);
+                $rs->MoveNext();
+            }
+        }
+        
         $sSql = "SELECT l.oxtimestamp, u.oxusername, u.oxfname, u.oxlname, oxcompany, /*l.oxfnc,*/ l.oxsql "
                 . "FROM oxadminlog l, oxuser u "
                 . "WHERE l.oxuserid = u.oxid "
                     . $sExcludeThis
                     . $this->_createKeywordFilter($cReportType, $sFreeRegexp)
-                    . "AND oxshopid = {$sShopId} "
-                . "ORDER BY oxtimestamp DESC "
+                    . $sWhereShopId
+                    . $sWhereUser
+                . "ORDER BY l.oxtimestamp DESC "
                 . "LIMIT 0,200";
 
-        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        $rs = $oDb->Execute($sSql);
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        
         $aAdminLogs = array();
-        while (!$rs->EOF) {
-            array_push($aAdminLogs, $rs->fields);
-            $rs->MoveNext();
+        if ($rs) {
+            while (!$rs->EOF) {
+                array_push($aAdminLogs, $rs->fields);
+                $rs->MoveNext();
+            }
         }
 
         foreach ($aAdminLogs as $key => $aAdminLog) {
@@ -78,6 +117,8 @@ class jxadminlog extends oxAdminDetails {
 
         $this->_aViewData["ReportType"] = $cReportType;
         $this->_aViewData["FreeRegexp"] = $sFreeRegexp;
+        $this->_aViewData["AdminUser"] = $cAdminUser;
+        $this->_aViewData["aAdminUsers"] = $aAdminUsers;
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
