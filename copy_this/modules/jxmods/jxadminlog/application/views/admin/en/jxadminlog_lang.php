@@ -5,23 +5,23 @@ $iLangNr    = 1;
 
 $aLang = array(
 	'charset'                               => 'ISO-8859-15',
-	'tbclcountry_history'                	=> 'History',
-	'tbclvendor_history'                	=> 'History',
-	'tbclmanufacturer_history'             	=> 'History',
+	'tbclcountry_history'                	=> 'Admin Log',
+	'tbclvendor_history'                	=> 'Admin Log',
+	'tbclmanufacturer_history'             	=> 'Admin Log',
 
-	'tbclpayment_history'                	=> 'History',
-	'tbcldiscount_history'                	=> 'History',
-	'tbcldeliveryset_history'              	=> 'History',
-	'tbcldelivery_history'                	=> 'History',
-	'tbclvoucherserie_history'             	=> 'History',
-	'tbclwrapping_history'                	=> 'History',
+	'tbclpayment_history'                	=> 'Admin Log',
+	'tbcldiscount_history'                	=> 'Admin Log',
+	'tbcldeliveryset_history'              	=> 'Admin Log',
+	'tbcldelivery_history'                	=> 'Admin Log',
+	'tbclvoucherserie_history'             	=> 'Admin Log',
+	'tbclwrapping_history'                	=> 'Admin Log',
     
-	'tbclarticle_history'                	=> 'History',
-	'tbclcategory_history'                	=> 'History',
-	'tbcluser_history'                	=> 'History',
-	'tbclusergroup_history'                	=> 'History',
+	'tbclarticle_history'                	=> 'Admin Log',
+	'tbclcategory_history'                	=> 'Admin Log',
+	'tbcluser_history'                	=> 'Admin Log',
+	'tbclusergroup_history'                	=> 'Admin Log',
     
-	'tbclorder_history'                	=> 'History',
+	'tbclorder_history'                	=> 'Admin Log',
 
 	'jxadminlog_menu'                	=> 'Admin Log',
     
