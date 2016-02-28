@@ -21,7 +21,7 @@
                 <TAB id="tbcldiscount_history" cl="jxadminlog_history" rights="malladmin" />
             </SUBMENU>
             <SUBMENU id="mxshippingset" cl="deliveryset" list="deliveryset_list">
-                <TAB id="tbcldeliveryset_history" cl="jxadmin_loghistory" rights="malladmin" />
+                <TAB id="tbcldeliveryset_history" cl="jxadminlog_history" rights="malladmin" />
             </SUBMENU>
             <SUBMENU id="mxshipping" cl="delivery" list="delivery_list">
                 <TAB id="tbcldelivery_history" cl="jxadminlog_history" rights="malladmin" />

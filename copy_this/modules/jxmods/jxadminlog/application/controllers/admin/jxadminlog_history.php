@@ -37,10 +37,10 @@ class jxadminlog_history extends oxAdminDetails {
         
         if ($myConfig->getBaseShopId() == 'oxbaseshop') {
             // CE or PE shop
-            $sShopId = "'{$myConfig->getBaseShopId()}'";
+            $sWhereShopId = "";
         } else {
             // EE shop
-            $sShopId = "{$myConfig->getBaseShopId()}";
+            $sWhereShopId = "AND l.oxshopid = {$myConfig->getBaseShopId()} ";
         }
         $blAdminLog = $myConfig->getConfigParam('blLogChangesInAdmin');
 
@@ -51,7 +51,7 @@ class jxadminlog_history extends oxAdminDetails {
                 . "FROM oxadminlog l, oxuser u "
                 . "WHERE l.oxuserid = u.oxid "
                     . "AND l.oxsql LIKE '%{$sObjectId}%' "
-                    . "AND l.oxshopid = {$sShopId} "
+                    . $sWhereShopId
                 . "ORDER BY oxtimestamp DESC "
                 . "LIMIT 0,100";
 
@@ -83,6 +83,9 @@ class jxadminlog_history extends oxAdminDetails {
     }
     
     
+    /*
+     * Highlights MySQL Keywords by using different colors
+     */
     private function _keywordHighlighter( $sText ) 
     {
         $aSearch = array(
