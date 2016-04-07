@@ -8,6 +8,7 @@ $aLang = array(
 	'tbclcountry_history'                	=> 'Admin Log',
 	'tbclvendor_history'                	=> 'Admin Log',
 	'tbclmanufacturer_history'             	=> 'Admin Log',
+	'tbcllanguage_history'             	=> 'Admin Log',
 
 	'tbclpayment_history'                	=> 'Admin Log',
 	'tbcldiscount_history'                	=> 'Admin Log',
@@ -15,6 +16,8 @@ $aLang = array(
 	'tbcldelivery_history'                	=> 'Admin Log',
 	'tbclvoucherserie_history'             	=> 'Admin Log',
 	'tbclwrapping_history'                	=> 'Admin Log',
+    
+	'tbclmodule_history'                	=> 'Admin Log',
     
 	'tbclarticle_history'                	=> 'Admin Log',
 	'tbclcategory_history'                	=> 'Admin Log',

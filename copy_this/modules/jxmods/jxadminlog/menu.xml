@@ -11,6 +11,9 @@
             <SUBMENU id="mxmanufacturer" cl="manufacturer" list="manufacturer_list">
                 <TAB id="tbclmanufacturer_history" cl="jxadminlog_history" rights="malladmin" />
             </SUBMENU>
+            <SUBMENU id="mxlanguages" cl="language" list="language_list">
+                <TAB id="tbcllanguage_history" cl="jxadminlog_history" rights="malladmin" />
+            </SUBMENU>
         </MAINMENU>
         
         <MAINMENU id="mxshopsett">
@@ -31,6 +34,12 @@
             </SUBMENU>
             <SUBMENU id="mxwrapping" cl="admin_wrapping" list="wrapping_list">
                 <TAB id="tbclwrapping_history" cl="jxadminlog_history" rights="malladmin" />
+            </SUBMENU>
+        </MAINMENU>
+        
+        <MAINMENU id="mxextensions">
+            <SUBMENU id="mxmodule" cl="module" list="module_list">
+                <TAB id="tbclmodule_history" cl="jxadminlog_history" rights="malladmin" />
             </SUBMENU>
         </MAINMENU>
 

@@ -8,7 +8,7 @@
 
 
 <style>
-    #liste tr:hover td{
+    #liste tr:hover td {
         background-color: #e0e0e0;
     }
 
@@ -26,11 +26,11 @@
 </style>
 
 
-<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
+[{*<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
     <input type="hidden" name="cl" value="jx_voucherserie_show">
-</form>
+</form>*}]
 
 
 <div style="height:92%;">
@@ -69,10 +69,10 @@
         </form>
     </div>
 
-    <div style="float:right;[{*position:relative;bottom:-40px;*}]padding-right:10px;">
+    [{*<div style="float:right;[{*position:relative;bottom:-40px;*}][{*padding-right:10px;">
     <br />
             <a href="https://github.com/job963/jxAdminLog" target="_blank"><span style="color:gray;">jxAdminLog</span></a>
-    </div>
+    </div>*}]
 
 </div>
 

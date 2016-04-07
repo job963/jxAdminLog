@@ -63,6 +63,7 @@ class jxadminlog_history extends oxAdminDetails {
         catch (Exception $e) {
             echo $e->getMessage();
         }
+        $oDb = NULL;
 
         $aAdminLogs = array();
         if ($rs) {
@@ -75,11 +76,155 @@ class jxadminlog_history extends oxAdminDetails {
         foreach ($aAdminLogs as $key => $aAdminLog) {
             $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
         }
+//echo '_getObjectType()='.$this->_getObjectType();        
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
 
         return $this->_sThisTemplate;
+    }
+	
+	
+    private function _getTables( $sReport )
+    {
+        switch ( $sReport ) {
+
+            case 'article':
+                $aKeywords = array('oxarticles','oxartextends');
+                break;
+
+            case 'category':
+                $aKeywords = array('oxarticles','oxartextends');
+                break;
+
+            case 'user':
+                $aKeywords = array('oxuser','oxnewssubscribed','oxremark');
+                break;
+
+            case 'order':
+                $aKeywords = array('oxorder','oxorderarticles');
+                break;
+
+            case 'payment':
+                $aKeywords = array('oxpayments');
+                break;
+
+            case 'module':
+                $aKeywords = array('oxconfig','oxconfigdisplay','oxtplblocks');
+                break;
+
+            default:    // all
+                return '';
+                break;
+        }
+        
+        return $aKeywords;
+    }
+	
+	
+    private function _getObjectType()
+    {
+        
+        // --- main menu
+        $oCountry = oxNew('oxcountry');
+        if ($oCountry->load($this->getEditObjectId())) {
+            return 'oxcountry';
+        }
+        
+        $oVendor = oxNew('oxvendor');
+        if ($oVendor->load($this->getEditObjectId())) {
+            return 'mxvendor';
+        }
+        
+        $oManufacturer = oxNew('oxmanufacturer');
+        if ($oManufacturer->load($this->getEditObjectId())) {
+            return 'oxmanufacturer';
+        }
+        
+        /*$oLanguage = oxNew('oxlang');
+        if ($oLanguage->load($this->getEditObjectId())) {
+            return 'oxlang';
+        }*/
+        
+        // --- shop settings
+        $oPayment = oxNew('oxpayment');
+        if ($oPayment->load($this->getEditObjectId())) {
+            return 'oxpayment';
+        }
+
+        $oDiscount = oxNew('oxdiscount');
+        if ($oDiscount->load($this->getEditObjectId())) {
+            return 'oxdiscount';
+        }
+
+        $oDeliveryset = oxNew('oxdeliveryset');
+        if ($oDeliveryset->load($this->getEditObjectId())) {
+            return 'oxdeliveryset';
+        }
+
+        $oDelivery = oxNew('oxdelivery');
+        if ($oDelivery->load($this->getEditObjectId())) {
+            return 'oxdelivery  ';
+        }
+
+        $oVoucherserie = oxNew('oxvoucherserie');
+        if ($oVoucherserie->load($this->getEditObjectId())) {
+            return 'oxvoucherserie';
+        }
+
+        $oWrapping = oxNew('oxwrapping');
+        if ($oWrapping->load($this->getEditObjectId())) {
+            return 'oxwrapping';
+        }
+
+        // --- Extensions
+        $oModule = oxNew('oxmodule');
+        if ($oModule->load($this->getEditObjectId())) {
+            return 'oxmodule';
+        }
+        
+        // --- Products
+        $oArticle = oxNew('oxarticle');
+        if ($oArticle->load($this->getEditObjectId())) {
+            return 'oxarticle';
+        }
+        
+        $oCategory = oxNew('oxcategory');
+        if ($oCategory->load($this->getEditObjectId())) {
+            return 'oxcategory';
+        }
+
+        // --- Users
+        $oUser = oxNew('oxuser');
+        if ($oUser->load($this->getEditObjectId())) {
+            return 'oxuser';
+        }
+
+        /*$oGroup = oxNew('oxgroups');
+        if ($oGroup->load($this->getEditObjectId())) {
+            return 'oxgroups';
+        }*/
+        
+        // --- Orders
+        $oOrder = oxNew('oxorder');
+        if ($oOrder->load($this->getEditObjectId())) {
+            return 'oxorder';
+        }
+        
+        /*
+        $oModule = oxNew('');
+        if ($oModule->load($this->getEditObjectId())) {
+            return 'oxmodule';
+        }
+        
+        
+        $oModule = oxNew('');
+        if ($oModule->load($this->getEditObjectId())) {
+            return 'oxmodule';
+        }
+        */
+        
+        return '';
     }
     
     
