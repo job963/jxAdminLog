@@ -76,49 +76,112 @@ class jxadminlog_history extends oxAdminDetails {
         foreach ($aAdminLogs as $key => $aAdminLog) {
             $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
         }
-//echo '_getObjectType()='.$this->_getObjectType();        
+//echo '_getObjectType()='.$this->_getObjectType();
+$aEditDates = $this->_getEditDates();
+/*echo '<hr>EditDates:<pre>';
+print_r($aEditDates);
+echo '</pre>';/**/
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
+        $this->_aViewData["aEditDates"] = $aEditDates;
 
         return $this->_sThisTemplate;
     }
-	
-	
-    private function _getTables( $sReport )
+    
+    
+    private function _getEditDates()
     {
-        switch ( $sReport ) {
+        $aTables = $this->_getTables();
+        $sObjectId = $this->getEditObjectId();
+//echo count($aTables);        
+        if( count($aTables) > 0 ) {
+            $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+            $aEditDates = array();
+            foreach ($aTables as $sTable => $aColumns) {
+                $sColumns = implode( ',', $aColumns );
+                if ($sTable == "oxconfig") {
+                    $sSql = "SELECT '$sTable' AS jxtable, $sColumns FROM $sTable WHERE {$aColumns[2]} = 'module:$sObjectId' ";
+                } else {
+                    $sSql = "SELECT '$sTable' AS jxtable, $sColumns FROM $sTable WHERE {$aColumns[2]} = '$sObjectId' ";
+                }
+//---echo "$sSql<br>";
+                try {
+                    $rs = $oDb->Select($sSql);
+                }
+                catch (Exception $e) {
+                    echo $e->getMessage();
+                }
+                if ($rs) {
+                    while (!$rs->EOF) {
+                        array_push($aEditDates, $rs->fields);
+                        $rs->MoveNext();
+                    }
+                }
+            }
+            $oDb = NULL;
+        }
+        return $aEditDates;
+    }
+	
+	
+    private function _getTables()
+    {
+        $sObjectType = $this->_getObjectType();
+//--echo 'sObjectType='.$sObjectType.'<br>';        
+        
+        switch ( $sObjectType ) {
 
-            case 'article':
-                $aKeywords = array('oxarticles','oxartextends');
+            case 'oxarticle':
+                $aTables = array(
+                            'oxarticles'   => array('oxinsert','oxtimestamp','oxid'),
+                            'oxartextends' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2attribute' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
+                            'oxobject2category' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid'),
+                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
+                            );
                 break;
 
-            case 'category':
-                $aKeywords = array('oxarticles','oxartextends');
+            case 'oxcategory':
+                $aTables = array(
+                            'oxcategories' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            );
                 break;
 
-            case 'user':
-                $aKeywords = array('oxuser','oxnewssubscribed','oxremark');
+            case 'oxuser':
+                $aTables = array(
+                            'oxuser'           => array('oxcreate AS oxinsert','oxtimestamp','oxid'),
+                            'oxnewssubscribed' => array('oxsubscribed AS oxinsert','oxtimestamp','oxuserid'),
+                            'oxremark'         => array('oxcreate AS oxinsert','oxtimestamp','oxparentid')
+                            );
                 break;
 
-            case 'order':
-                $aKeywords = array('oxorder','oxorderarticles');
+            case 'oxorder':
+                $aTables = array(
+                            'oxorder'         => array('oxorderdate AS oxinsert','oxtimestamp','oxid'),
+                            'oxorderarticles' => array('oxinsert','oxtimestamp','oxorderid')
+                            );
                 break;
 
-            case 'payment':
-                $aKeywords = array('oxpayments');
+            case 'oxpayment':
+                $aTables = array(
+                            'oxpayments' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            );
                 break;
 
-            case 'module':
-                $aKeywords = array('oxconfig','oxconfigdisplay','oxtplblocks');
+            case 'oxmodule':
+                $aTables = array(
+                            'oxconfig'        => array('"0000-00-00" AS oxinsert','oxtimestamp','oxmodule'),
+                            'oxtplblocks'     => array('"0000-00-00" AS oxinsert','oxtimestamp','oxmodule')
+                            );
                 break;
 
             default:    // all
-                return '';
+                return NULL;
                 break;
         }
         
-        return $aKeywords;
+        return $aTables;
     }
 	
 	
@@ -164,7 +227,7 @@ class jxadminlog_history extends oxAdminDetails {
 
         $oDelivery = oxNew('oxdelivery');
         if ($oDelivery->load($this->getEditObjectId())) {
-            return 'oxdelivery  ';
+            return 'oxdelivery';
         }
 
         $oVoucherserie = oxNew('oxvoucherserie');

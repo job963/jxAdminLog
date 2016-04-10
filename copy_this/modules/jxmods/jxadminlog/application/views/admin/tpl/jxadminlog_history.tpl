@@ -26,16 +26,36 @@
 </style>
 
 
-[{*<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
+<form name="transfer" id="transfer" action="[{ $oViewConf->getSelfLink() }]" method="post">
     [{ $oViewConf->getHiddenSid() }]
     <input type="hidden" name="oxid" value="[{ $oxid }]">
-    <input type="hidden" name="cl" value="jx_voucherserie_show">
-</form>*}]
+    <input type="hidden" name="cl" value="jxadminlog_history">
+</form>
 
 
 <div style="height:92%;">
 
-    <div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll; float:left;">
+    <h3>Overview</h3>
+    <table>
+        <tr>
+            <td class="listheader">Table</td>
+            <td class="listheader">Inserted</td>
+            <td class="listheader">Modified</td>
+        </tr>
+        [{foreach item=aTable from=$aEditDates}]
+            [{ cycle values="listitem,listitem2" assign="listclass" }]
+            <tr>
+                <td class="[{ $listclass }]"><b>[{$aTable.jxtable}]</b></td>
+                <td class="[{ $listclass }]">[{$aTable.oxinsert}]</td>
+                <td class="[{ $listclass }]">[{$aTable.oxtimestamp}]</td>
+            </tr>
+        [{/foreach}]
+    </table>
+    [{*<p>&nbsp;</p>*}]
+    <div style="height:10px;"></div>
+    
+    <h3>Details</h3>
+    [{*<div id="liste" style="border:0px solid gray; padding:4px; width:99%; height:95%; overflow-y:scroll; float:left;">*}]
         [{if $blAdminLog == FALSE }]
             <div style="border:2px solid #dd0000;margin:10px;padding:5px;background-color:#ffdddd;font-family:sans-serif;font-size:14px;">
                 <b>Setting <i>blLogChangesInAdmin</i> in <i>config.inc.php</i> is deactivated!</b><br />Actually no new admin action will be logged.
@@ -46,7 +66,6 @@
             <input type="hidden" name="oxid" value="[{ $oxid }]">
             <input type="hidden" name="cl" value="jxadminlog">
             <input type="hidden" name="fnc" value="">
-            [{*<input type="hidden" name="voucherdelid" value="">*}]
             <table cellspacing="0" cellpadding="0" border="0" width="99%">
                 <tr>
                     <td class="listheader">[{ oxmultilang ident="JXADMINLOG_TIME" }]</td>
@@ -67,7 +86,7 @@
                 [{/foreach}]
             </table>
         </form>
-    </div>
+    [{*</div>*}]
 
     [{*<div style="float:right;[{*position:relative;bottom:-40px;*}][{*padding-right:10px;">
     <br />

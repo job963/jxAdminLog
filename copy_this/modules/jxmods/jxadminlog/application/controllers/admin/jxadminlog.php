@@ -141,7 +141,7 @@ class jxadminlog extends oxAdminDetails {
                 break;
 
             case 'category':
-                $aKeywords = array('oxarticles','oxartextends');
+                $aKeywords = array('oxcategories');
                 break;
 
             case 'user':
@@ -157,7 +157,7 @@ class jxadminlog extends oxAdminDetails {
                 break;
 
             case 'module':
-                $aKeywords = array('oxconfig','oxconfigdisplay','oxtplblocks');
+                $aKeywords = array('oxconfig','oxtplblocks');
                 break;
 
             case 'regexp':

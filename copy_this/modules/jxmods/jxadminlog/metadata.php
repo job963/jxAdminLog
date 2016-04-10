@@ -19,7 +19,7 @@ $aModule = array(
                                 . '<code>$this->blLogChangesInAdmin = false;</code> to <code>True</code>)<br /><br />'
                         ),
     'thumbnail'    => 'jxadminlog.png',
-    'version'      => '0.2.4',
+    'version'      => '0.3.0',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxAdminLog',
     'email'        => 'jobarthel@gmail.com',
