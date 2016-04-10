@@ -118,10 +118,43 @@ echo '</pre>';/**/
                         $rs->MoveNext();
                     }
                 }
+                foreach ($aEditDates as $key => $aEditDate) {
+                    $aEditDates[$key]['jxusername'] = $this->_getLogUsername( $sObjectId, $aEditDate['oxtimestamp'] );
+//$this->_getLogUsername( $sObjectId, $aEditDate['oxtimestamp'] );                    
+                }
             }
             $oDb = NULL;
         }
         return $aEditDates;
+    }
+    
+    
+    private function _getLogUsername( $sObjectId, $sTimestamp ) 
+    {
+        $sSql = "SELECT u.oxusername, u.oxfname, u.oxlname "
+                . "FROM oxadminlog l, oxuser u "
+                . "WHERE l.oxuserid = u.oxid "
+                    . "AND l.oxsql LIKE '%{$sObjectId}%' "
+                    . "AND l.oxtimestamp = '{$sTimestamp}' "
+                . "LIMIT 0,1";
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        //$rs = $oDb->Execute($sSql);
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        $oDb = NULL;
+
+        $aAdminLogs = array();
+        if ($rs) {
+            if ($rs->_numOfRows > 0) {
+                return $rs->fields['oxusername'];
+            } else {
+                return '';
+            }
+        }
     }
 	
 	
@@ -137,14 +170,15 @@ echo '</pre>';/**/
                             'oxarticles'   => array('oxinsert','oxtimestamp','oxid'),
                             'oxartextends' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
                             'oxobject2attribute' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
-                            'oxobject2category' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid'),
+                            'oxobject2category' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
                             'oxobject2discount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
                             );
                 break;
 
             case 'oxcategory':
                 $aTables = array(
-                            'oxcategories' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            'oxcategories' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
                             );
                 break;
 
@@ -152,14 +186,14 @@ echo '</pre>';/**/
                 $aTables = array(
                             'oxuser'           => array('oxcreate AS oxinsert','oxtimestamp','oxid'),
                             'oxnewssubscribed' => array('oxsubscribed AS oxinsert','oxtimestamp','oxuserid'),
-                            'oxremark'         => array('oxcreate AS oxinsert','oxtimestamp','oxparentid')
+                            'oxremark'         => array('oxcreate AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxparentid')
                             );
                 break;
 
             case 'oxorder':
                 $aTables = array(
                             'oxorder'         => array('oxorderdate AS oxinsert','oxtimestamp','oxid'),
-                            'oxorderarticles' => array('oxinsert','oxtimestamp','oxorderid')
+                            'oxorderarticles' => array('oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxorderid')
                             );
                 break;
 
@@ -171,8 +205,8 @@ echo '</pre>';/**/
 
             case 'oxmodule':
                 $aTables = array(
-                            'oxconfig'        => array('"0000-00-00" AS oxinsert','oxtimestamp','oxmodule'),
-                            'oxtplblocks'     => array('"0000-00-00" AS oxinsert','oxtimestamp','oxmodule')
+                            'oxconfig'        => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxmodule'),
+                            'oxtplblocks'     => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxmodule')
                             );
                 break;
 
