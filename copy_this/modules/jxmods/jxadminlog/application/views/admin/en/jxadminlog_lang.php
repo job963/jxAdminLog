@@ -28,6 +28,13 @@ $aLang = array(
         'SHOP_MODULE_GROUP_JXADMINLOG_WHERE'    => 'Display Filter',
         'SHOP_MODULE_sJxAdminLogExcludeThis'    => 'Exclude Condition (regular expression, fitting item will be excluded)',
     
+	'JXADMINLOG_OVERVIEW'                   => 'Overview',
+	'JXADMINLOG_DETAILS'                    => 'Details',
+    
+	'JXADMINLOG_TABLE'                      => 'Table',
+	'JXADMINLOG_INSERTED'                   => 'Created at',
+	'JXADMINLOG_MODIFIED'                   => 'Last modified',
+    
 	'JXADMINLOG_FILTERBY'                   => 'Filter by',
 	'JXADMINLOG_FILTERCONDITION'            => 'Filter Condition',
 	'JXADMINLOG_TIME'                       => 'Date/Time',

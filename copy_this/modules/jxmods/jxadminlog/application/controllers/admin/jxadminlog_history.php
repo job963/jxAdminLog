@@ -76,11 +76,8 @@ class jxadminlog_history extends oxAdminDetails {
         foreach ($aAdminLogs as $key => $aAdminLog) {
             $aAdminLogs[$key]['oxsql'] = $this->_keywordHighlighter( strip_tags( $aAdminLogs[$key]['oxsql'] ) );
         }
-//echo '_getObjectType()='.$this->_getObjectType();
-$aEditDates = $this->_getEditDates();
-/*echo '<hr>EditDates:<pre>';
-print_r($aEditDates);
-echo '</pre>';/**/
+
+        $aEditDates = $this->_getEditDates();
             
         $this->_aViewData["blAdminLog"] = $blAdminLog;
         $this->_aViewData["aAdminLogs"] = $aAdminLogs;
@@ -94,7 +91,7 @@ echo '</pre>';/**/
     {
         $aTables = $this->_getTables();
         $sObjectId = $this->getEditObjectId();
-//echo count($aTables);        
+
         if( count($aTables) > 0 ) {
             $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
             $aEditDates = array();
@@ -105,7 +102,7 @@ echo '</pre>';/**/
                 } else {
                     $sSql = "SELECT '$sTable' AS jxtable, $sColumns FROM $sTable WHERE {$aColumns[2]} = '$sObjectId' ";
                 }
-//---echo "$sSql<br>";
+
                 try {
                     $rs = $oDb->Select($sSql);
                 }
@@ -114,13 +111,14 @@ echo '</pre>';/**/
                 }
                 if ($rs) {
                     while (!$rs->EOF) {
-                        array_push($aEditDates, $rs->fields);
+                        if ($rs->fields['oxtimestamp'] != '') {
+                            array_push($aEditDates, $rs->fields);
+                        }
                         $rs->MoveNext();
                     }
                 }
                 foreach ($aEditDates as $key => $aEditDate) {
                     $aEditDates[$key]['jxusername'] = $this->_getLogUsername( $sObjectId, $aEditDate['oxtimestamp'] );
-//$this->_getLogUsername( $sObjectId, $aEditDate['oxtimestamp'] );                    
                 }
             }
             $oDb = NULL;
@@ -138,7 +136,7 @@ echo '</pre>';/**/
                     . "AND l.oxtimestamp = '{$sTimestamp}' "
                 . "LIMIT 0,1";
         $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        //$rs = $oDb->Execute($sSql);
+
         try {
             $rs = $oDb->Select($sSql);
         }
@@ -161,7 +159,6 @@ echo '</pre>';/**/
     private function _getTables()
     {
         $sObjectType = $this->_getObjectType();
-//--echo 'sObjectType='.$sObjectType.'<br>';        
         
         switch ( $sObjectType ) {
 
