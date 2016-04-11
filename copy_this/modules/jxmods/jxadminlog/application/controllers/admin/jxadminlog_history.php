@@ -159,23 +159,92 @@ class jxadminlog_history extends oxAdminDetails {
     private function _getTables()
     {
         $sObjectType = $this->_getObjectType();
+//echo $sObjectType;        
         
         switch ( $sObjectType ) {
+
+            case 'oxcountry':
+                $aTables = array(
+                            'oxcountry' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxstates' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxcountryid')
+                            );
+                break;
+
+            case 'oxvendor':
+                $aTables = array(
+                            'oxvendor' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            );
+                break;
+
+            case 'oxmanufacturer':
+                $aTables = array(
+                            'oxmanufacturers' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            );
+                break;
+
+            case 'oxdiscount':
+                $aTables = array(
+                            'oxdiscount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxdiscountid')
+                            );
+                break;
+
+            case 'oxdeliveryset':
+                $aTables = array(
+                            'oxdeliveryset' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxdel2delset' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxdelsetid'),
+                            'oxobject2delivery' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxdeliveryid'),
+                            'oxobject2payment' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxdelivery':
+                $aTables = array(
+                            'oxdelivery' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2delivery' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxdeliveryid')
+                            );
+                break;
+
+            case 'oxvoucherserie':
+                $aTables = array(
+                            'oxvoucherseries' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxvouchers' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxvoucherserieid'),
+                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxdiscountid'),
+                            'oxobject2group' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxwrapping':
+                $aTables = array(
+                            'oxwrapping' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid')
+                            );
+                break;
 
             case 'oxarticle':
                 $aTables = array(
                             'oxarticles'   => array('oxinsert','oxtimestamp','oxid'),
                             'oxartextends' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
                             'oxobject2attribute' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
+                            'oxmediaurls' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
+                            'oxfiles' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxartid'),
                             'oxobject2category' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
                             'oxobject2discount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxattribute':
+                $aTables = array(
+                            'oxattribute' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxcategory2attribute' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxattrid'),
+                            'oxobject2attribute' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxattrid')
                             );
                 break;
 
             case 'oxcategory':
                 $aTables = array(
                             'oxcategories' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
-                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
+                            'oxobject2category' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxcatnid'),
+                            'oxobject2discount' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
                             );
                 break;
 
@@ -183,7 +252,15 @@ class jxadminlog_history extends oxAdminDetails {
                 $aTables = array(
                             'oxuser'           => array('oxcreate AS oxinsert','oxtimestamp','oxid'),
                             'oxnewssubscribed' => array('oxsubscribed AS oxinsert','oxtimestamp','oxuserid'),
-                            'oxremark'         => array('oxcreate AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxparentid')
+                            'oxremark'         => array('oxcreate AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxparentid'),
+                            'oxobject2group'   => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxgroups':
+                $aTables = array(
+                            'oxgroups'        => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2group'  => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxgroupsid')
                             );
                 break;
 
@@ -191,6 +268,40 @@ class jxadminlog_history extends oxAdminDetails {
                 $aTables = array(
                             'oxorder'         => array('oxorderdate AS oxinsert','oxtimestamp','oxid'),
                             'oxorderarticles' => array('oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxorderid')
+                            );
+                break;
+
+            case 'oxnews':
+                $aTables = array(
+                            'oxnews'          => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2group'   => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxnewsletter':
+                $aTables = array(
+                            'oxnewsletter'     => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxobject2group'   => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxlinks':
+                $aTables = array(
+                            'oxlinks'          => array('oxinsert','oxtimestamp','oxid')
+                            );
+                break;
+
+            case 'oxcontent':
+                $aTables = array(
+                            'oxcontents'       => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxseo'            => array('"0000-00-00" AS oxinsert','oxtimestamp','oxobjectid')
+                            );
+                break;
+
+            case 'oxactions':
+                $aTables = array(
+                            'oxactions'         => array('"0000-00-00" AS oxinsert','oxtimestamp','oxid'),
+                            'oxactions2article' => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxactionid')
                             );
                 break;
 
@@ -227,7 +338,7 @@ class jxadminlog_history extends oxAdminDetails {
         
         $oVendor = oxNew('oxvendor');
         if ($oVendor->load($this->getEditObjectId())) {
-            return 'mxvendor';
+            return 'oxvendor';
         }
         
         $oManufacturer = oxNew('oxmanufacturer');
@@ -283,6 +394,11 @@ class jxadminlog_history extends oxAdminDetails {
             return 'oxarticle';
         }
         
+        $oAttribute = oxNew('oxattribute');
+        if ($oAttribute->load($this->getEditObjectId())) {
+            return 'oxattribute';
+        }
+        
         $oCategory = oxNew('oxcategory');
         if ($oCategory->load($this->getEditObjectId())) {
             return 'oxcategory';
@@ -294,15 +410,41 @@ class jxadminlog_history extends oxAdminDetails {
             return 'oxuser';
         }
 
-        /*$oGroup = oxNew('oxgroups');
+        $oGroup = oxNew('oxgroups');
         if ($oGroup->load($this->getEditObjectId())) {
             return 'oxgroups';
-        }*/
+        }
         
         // --- Orders
         $oOrder = oxNew('oxorder');
         if ($oOrder->load($this->getEditObjectId())) {
             return 'oxorder';
+        }
+        
+        // --- Customer Info
+        $oNews = oxNew('oxnews');
+        if ($oNews->load($this->getEditObjectId())) {
+            return 'oxnews';
+        }
+        
+        $oNewsletter = oxNew('oxnewsletter');
+        if ($oNewsletter->load($this->getEditObjectId())) {
+            return 'oxnewsletter';
+        }
+        
+        $oLinks = oxNew('oxlinks');
+        if ($oLinks->load($this->getEditObjectId())) {
+            return 'oxlinks';
+        }
+        
+        $oContent = oxNew('oxcontent');
+        if ($oContent->load($this->getEditObjectId())) {
+            return 'oxcontent';
+        }
+        
+        $oActions = oxNew('oxactions');
+        if ($oActions->load($this->getEditObjectId())) {
+            return 'oxactions';
         }
         
         /*
