@@ -53,6 +53,9 @@
             <SUBMENU id="mxcategories" cl="category" list="category_list">
                 <TAB id="tbclcategory_history" cl="jxadminlog_history" rights="malladmin" />
             </SUBMENU>
+            <SUBMENU id="mxsellist" cl="selectlist" list="selectlist_list">
+                <TAB id="tbclselectlist_history" cl="jxadminlog_history" rights="malladmin" />
+            </SUBMENU>
         </MAINMENU>
 
         <MAINMENU id="mxuadmin">

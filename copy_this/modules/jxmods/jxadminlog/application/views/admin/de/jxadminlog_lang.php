@@ -22,6 +22,8 @@ $aLang = array(
 	'tbclarticle_history'                	=> 'Admin Log',
 	'tbclattribute_history'                	=> 'Admin Log',
 	'tbclcategory_history'                	=> 'Admin Log',
+	'tbclselectlist_history'                => 'Admin Log',
+    
 	'tbcluser_history'                	=> 'Admin Log',
 	'tbclusergroup_history'                	=> 'Admin Log',
     
