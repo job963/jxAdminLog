@@ -87,6 +87,9 @@ class jxadminlog_history extends oxAdminDetails {
     }
     
     
+    /*
+     * Returns the related tables with first, last modification and username
+     */
     private function _getEditDates()
     {
         $aTables = $this->_getTables();
@@ -127,6 +130,9 @@ class jxadminlog_history extends oxAdminDetails {
     }
     
     
+    /*
+     * Returns the username of the last modification of an object
+     */
     private function _getLogUsername( $sObjectId, $sTimestamp ) 
     {
         $sSql = "SELECT u.oxusername, u.oxfname, u.oxlname "
@@ -156,6 +162,9 @@ class jxadminlog_history extends oxAdminDetails {
     }
 	
 	
+    /*
+     * Returns array with tablename and related fields for the actual object
+     */
     private function _getTables()
     {
         $sObjectType = $this->_getObjectType();
@@ -339,6 +348,9 @@ class jxadminlog_history extends oxAdminDetails {
     }
 	
 	
+    /*
+     * Determines the class / object type of the actual object
+     */
     private function _getObjectType()
     {
         
@@ -465,6 +477,33 @@ class jxadminlog_history extends oxAdminDetails {
         }
         
         return '';
+    }
+    
+    
+    /*
+     * Checks if the OxId exists in the given table
+     */
+    private function _existsObject( $sObject, $sOxId )
+    {
+        $sSql = "SELECT * FROM $sObject WHERE oxid = '$sOxId' ";
+
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        $oDb = NULL;
+        
+        if ($rs) {
+            if ($rs->_numOfRows > 0) {
+                return TRUE;
+            } else {
+                return FALSE;
+            }
+        }
+        
     }
     
     
