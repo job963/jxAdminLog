@@ -280,7 +280,9 @@ class jxadminlog_history extends oxAdminDetails {
                             'oxuser'           => array('oxcreate AS oxinsert','oxtimestamp','oxid'),
                             'oxnewssubscribed' => array('oxsubscribed AS oxinsert','oxtimestamp','oxuserid'),
                             'oxremark'         => array('oxcreate AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxparentid'),
-                            'oxobject2group'   => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid')
+                            'oxobject2group'   => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxobjectid'),
+                            'oxremark'         => array('oxcreate AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxparentid'),
+                            'oxratings'        => array('"0000-00-00" AS oxinsert','MAX(oxtimestamp) AS oxtimestamp','oxuserid')
                             );
                 break;
 
